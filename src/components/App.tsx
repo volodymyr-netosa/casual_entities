@@ -28,16 +28,23 @@ export class App extends React.Component<Props,State> {
     }
 
     componentDidMount() {
-        this.state.container.init(this.props.entityPath);
+        this.state.container.init(this.props.entityPath).then(()=>console.log('inited'));
     }
 
+    selectEntityHandler = (name: string) => {
+        this.setState({selectedEntityName: name});
+    }
     render() {
         let entities = this.state.container.getEntitiesNames();
         return (
                 <div className='container-fluid'>
                     <div className='row'>
                         <div className='col-md-4'>
-                            <EntityList selectedEntityName={this.state.selectedEntityName} />
+                            <EntityList 
+                                selectedEntityName={this.state.selectedEntityName} 
+                                entities={entities} 
+                                selectEntityHandler={this.selectEntityHandler}
+                            />
                         </div>
                         <div className='col-md-8'>
                             <ItemsTable selectedEntityName={this.state.selectedEntityName} />
