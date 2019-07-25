@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "webpack-dev-server --no-inline --hot",
+    "start:dev": "webpack-dev-server --no-inline",
     "build": "webpack",
     "test": "jest"
   },
@@ -27,8 +27,13 @@
     "webpack-dev-server": "^3.7.2"
   },
   "dependencies": {
+    "bootstrap": "^4.3.1",
+    "css-loader": "^3.1.0",
+    "object-assign": "^4.1.1",
     "path": "^0.12.7",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "style-loader": "^0.23.1"
   }
 }
