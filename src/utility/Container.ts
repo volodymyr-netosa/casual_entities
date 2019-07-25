@@ -1,24 +1,20 @@
-import { getEntitiesFromFolder } from './utility';
-
 export class Container {
     private entities = new Map();
     private entitiesInstances = new Map();
     private allowedDataTypes = ['string', 'number', 'boolean']
 
-    async init(entityFolderPath: string) {
-        return getEntitiesFromFolder(entityFolderPath).then(
-            (entities) => {
-                entities.forEach((name, props) => {
-                    if (this.verifyEntityProperties(props))
-                        this.entities.set(name, props)
-                    else console.log(`Adding ${name} entity failed. Not allowed data type`)   //TODO: add normal logger?
-                });
-            }
-        )
+    constructor(entities: {name:string, props: {}}[]) {
+        entities.forEach((value) => {
+            const { name, props } = value;
+            this.addEntity(name, props);
+        });
     }
     
     addEntity(name: string, properties: any) {
-        if (this.entities.has(name) || !this.verifyEntityProperties(properties)) return false;
+        if (this.entities.has(name) || !this.verifyEntityProperties(properties)) {
+            console.log(`Adding ${name} entity failed. Not allowed data type or entity with that name already exists.`)   //TODO: add normal logger?
+            return false;
+        }
         this.entities.set(name, properties);
     }
 
@@ -38,13 +34,14 @@ export class Container {
     }
 
     getEntitiesNames(){
-        return Array.from(this.entitiesInstances.keys())
+        let x = Array.from(this.entities.keys());
+        return x; 
     }
 
     verifyEntityProperties(properties: any) {
         for (let propName of Object.keys(properties)) {
             let propType = properties[propName];
-            if (!(propType in this.allowedDataTypes)) return false;
+            if (!~(this.allowedDataTypes.indexOf(propType))) return false;
         }
         return true;
     }

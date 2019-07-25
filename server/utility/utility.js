@@ -1,7 +1,7 @@
-import * as fs from 'fs';
-import * as path from 'path';
+const fs = require('fs');
+const path = require('path');
 
-export async function parseJsonEntityFile(absolutePath: string) {
+async function parseJsonEntityFile(absolutePath) {
     return new Promise((resolve, reject) => {
         fs.readFile(absolutePath, (err, buffer) => {
             if (err) return reject(err);
@@ -15,7 +15,7 @@ export async function parseJsonEntityFile(absolutePath: string) {
     });
 }
 
-export async function getJsonFilesInFolder(folderPath: string) {
+async function getJsonFilesInFolder(folderPath) {
     return new Promise((resolve, reject) => {
         fs.readdir(folderPath, (err, files) => {
             if (err) return reject(err);
@@ -25,11 +25,11 @@ export async function getJsonFilesInFolder(folderPath: string) {
     })
 }
 
-export async function getEntitiesFromFolder(folderPath: string) {
-    return getJsonFilesInFolder(folderPath).then((fileNames: any[]) => {
-        const entityPromices: any[] = []
+async function getEntitiesFromFolder(folderPath) {
+    return getJsonFilesInFolder(folderPath).then((fileNames) => {
+        const entityPromices = []
         fileNames.forEach(
-            (name: string) => {
+            (name) => {
                 entityPromices.push(
                     parseJsonEntityFile(path.resolve(folderPath, name))
                 )
@@ -37,18 +37,22 @@ export async function getEntitiesFromFolder(folderPath: string) {
         );
         return Promise.all(entityPromices);
     }).then((entitiesData) => {
-        let entities = new Map();
+        let entities = [];
         for (let data of entitiesData) {
-            entities.set(data.entityName, data.entity);
+            entities.push({name: data.entityName, props:data.entity});
         }
         return entities;
     })
 }
 
-function getFileNameFromPath(path: string): string {
+function getFileNameFromPath(path) {
     return path.replace(/^.*[\\\/]/, '');
 };
 
-function removeExtension(fileName: string): string {
+function removeExtension(fileName) {
     return fileName.split('.').slice(0, -1).join('.');
+}
+
+module.exports = {
+    getEntitiesFromFolder
 }
