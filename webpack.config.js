@@ -7,7 +7,6 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, "./dist"),
-        publicPath: "/dist",
         filename: "bundle.js",
     },
 
@@ -44,7 +43,9 @@ module.exports = {
             }
         ]
     },
-    plugins: [new HtmlWebpackPlugin()],
+    plugins: [new HtmlWebpackPlugin({
+        template: "./src/index.html"
+    })],
     node: {
         fs: "empty"
     }
