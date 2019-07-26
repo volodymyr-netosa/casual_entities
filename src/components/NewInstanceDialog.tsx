@@ -1,6 +1,8 @@
 import * as React from 'react';
+import axios from 'axios';
+const ENTITY_API_URL = '/api';
 
-type Props = { entityTypes: {}, addNewInstance: (instance: {}) => any}
+type Props = { entityTypes: {}}
 export class NewInstanceDialog extends React.Component<Props,any> {
     handleInputChange = (event:any) => {
         const target = event.target;
@@ -89,7 +91,7 @@ export class NewInstanceDialog extends React.Component<Props,any> {
 
     handleFormSubmit = (event: React.SyntheticEvent) => {
         event.preventDefault();
-        this.props.addNewInstance(this.state);  //it isn't ok to send full this.state
+        axios.post(ENTITY_API_URL, this.state);  //it isn't ok to send full this.state
     }
 
     render() {

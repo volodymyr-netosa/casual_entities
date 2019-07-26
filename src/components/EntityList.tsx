@@ -1,6 +1,6 @@
 import * as React from "react";
 import axios from 'axios';
-const ENTITY_API_URL = '/api';
+const ENTITY_API_URL = '/names';
 
 type Props = { 
     selectedEntityName: string, 
@@ -10,15 +10,23 @@ type State = {
     entities: string[]
 }
 export class EntityList extends React.Component<Props,State> {
+    constructor(props:any){
+        super(props);
+        this.state = {
+            entities: []
+        }
+    }
     componentDidMount(){
         axios.get(ENTITY_API_URL).then((response) =>
-        this.setState({
-            entities: response.data.entities
-        }))
+        { 
+            this.setState({
+                entities: response.data
+            })
+        })
     }
 
     render() {
-        let entitiesList = this.state.entities && this.state.entities.map((name, id)=>
+        let entitiesList = this.state.entities.map((name, id)=>
             <a href="#" 
                 className="list-group-item list-group-item-action bg-light" 
                 key={id}

@@ -1,21 +1,14 @@
-import { render } from "react-dom";
+
 import * as React from "react";
 import { Table } from "react-bootstrap";
 import { NewInstanceDialog } from "./NewInstanceDialog";
-import axios from 'axios';
-const ENTITY_API_URL = '/api';
 
-type Props = { selectedEntityName: string }
-type State = {}
-export class ItemsTable extends React.Component<Props,any> {
-    componentDidMoun() {
-        axios.get(ENTITY_API_URL).then((response) =>
-            this.setState({
-                entityProps: response.data.entityProps,
-                entityInstances: response.data.entityInstances
-            })
-        )
-    }
+
+type Props = { selectedEntityName: string, entityProps:{[key:string] : string}, entityInstances: {}[] }
+// type State = { entityProps: {[key:string]: string}, entityInstances: {}[]}
+
+export class ItemsTable extends React.Component<Props,null> {
+
     generateTableRow = (columnNames: string[], instance: {[key: string]: string}) => {
         return columnNames.map(
             (colName, id) => 
@@ -65,18 +58,22 @@ export class ItemsTable extends React.Component<Props,any> {
     }
 
     render() {
+        let entity = this.props.entityProps;
         return (
-            <div className='row pt-2'>
-                <div className='col-md-7'>
-                    {this.state.entityProps && this.generateInstanceTable(this.state.entityProps, this.state.entityInstances)}
-                </div>
-                <div className='col-md-5 pr-4'>
-                    <NewInstanceDialog 
-                        entityTypes={this.state.entityProps}
-                        addNewInstance={this.state.addNewInstance}
-                    />
-                </div>
-            </div>
+            <>                      
+                {entity &&                      //Todo fix it
+                    <div className='row pt-2'>
+                        <div className='col-md-7'>
+                            {this.generateInstanceTable(this.props.entityProps, this.props.entityInstances)}
+                        </div>
+                        <div className='col-md-5 pr-4'>
+                            <NewInstanceDialog 
+                                entityTypes={this.props.entityProps}
+                            />
+                        </div>
+                    </div>
+                }
+            </>
         )
     }
 }

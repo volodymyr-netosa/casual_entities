@@ -13,8 +13,20 @@ let container = new Container();
 
 app.use(express.static('dist'));
 
-app.get('/api', (req, res) => {
+app.post('/add', (req, res) => {
+
+});
+
+app.get('/names', (req, res) => {
   res.send(container.getEntitiesNames());
+});
+
+app.get('/instances', (req,res) => {
+  let entityName = req.query.name;
+  res.send({
+    entityInstances: container.getEntityInstances(entityName),
+    entityProps: container.getEntityProps(entityName)
+  })
 });
 
 app.get('/', (req, res) => {
