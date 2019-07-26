@@ -1,3 +1,5 @@
+import { getEntitiesFromFolder } from './utility'
+
 export class Container {
     private entities = new Map();
     private entitiesInstances = new Map();
@@ -28,7 +30,7 @@ export class Container {
 
     addEntityInstance(entityName: string, instance: {}) {
         if (!this.verityEntityInstance(entityName, instance)) {
-            console.log(`Cant add ${entityName} instance ${instance}, props type mismatching`); //TODO: logger ?Xd
+            console.log(`Cant add ${entityName} instance ${JSON.stringify(instance)}, props type mismatching`); //TODO: logger ?Xd
             return false;
         }
         if (this.entitiesInstances.has(entityName)) {
@@ -64,3 +66,9 @@ export class Container {
         return this.entities.delete(name);
     }
 }
+
+export default async function initializeContainer(entitiesPath: string) { 
+    return getEntitiesFromFolder(entitiesPath).then(
+      (entities) => new Container(entities) 
+    )
+  }

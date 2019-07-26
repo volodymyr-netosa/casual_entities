@@ -2,25 +2,20 @@ import { render } from "react-dom";
 import * as React from "react";
 import { Table } from "react-bootstrap";
 import { NewInstanceDialog } from "./NewInstanceDialog";
+import axios from 'axios';
+const ENTITY_API_URL = '/api';
 
-type Props = { entityInstances: {}[], entityProps: {}, addNewInstance: (instance: {}) => any }
-type State = { addingDialogActive: boolean }
-export class ItemsTable extends React.Component<Props,State> {
-    constructor(props: any){
-        super(props);
-        this.state = {
-            addingDialogActive: false
-        }
+type Props = { selectedEntityName: string }
+type State = {}
+export class ItemsTable extends React.Component<Props,any> {
+    componentDidMoun() {
+        axios.get(ENTITY_API_URL).then((response) =>
+            this.setState({
+                entityProps: response.data.entityProps,
+                entityInstances: response.data.entityInstances
+            })
+        )
     }
-
-    triggerAddingDialog = () => {
-        this.setState((state) => {
-            return {
-                addingDialogActive: !state.addingDialogActive
-            }
-        })
-    }
-
     generateTableRow = (columnNames: string[], instance: {[key: string]: string}) => {
         return columnNames.map(
             (colName, id) => 
@@ -73,15 +68,13 @@ export class ItemsTable extends React.Component<Props,State> {
         return (
             <div className='row pt-2'>
                 <div className='col-md-7'>
-                    {this.props.entityProps && this.generateInstanceTable(this.props.entityProps, this.props.entityInstances)}
+                    {this.state.entityProps && this.generateInstanceTable(this.state.entityProps, this.state.entityInstances)}
                 </div>
                 <div className='col-md-5 pr-4'>
-                    {this.props.entityProps && 
-                        <NewInstanceDialog 
-                            entityTypes={this.props.entityProps}
-                            addNewInstance={this.props.addNewInstance}
-                        />
-                    }
+                    <NewInstanceDialog 
+                        entityTypes={this.state.entityProps}
+                        addNewInstance={this.state.addNewInstance}
+                    />
                 </div>
             </div>
         )

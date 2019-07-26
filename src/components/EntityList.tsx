@@ -1,14 +1,24 @@
-import { render } from "react-dom";
 import * as React from "react";
+import axios from 'axios';
+const ENTITY_API_URL = '/api';
 
 type Props = { 
     selectedEntityName: string, 
-    entities: string[],
     selectEntityHandler: (name: string) => any
 }
-export class EntityList extends React.Component<Props,null> {
+type State = {
+    entities: string[]
+}
+export class EntityList extends React.Component<Props,State> {
+    componentDidMount(){
+        axios.get(ENTITY_API_URL).then((response) =>
+        this.setState({
+            entities: response.data.entities
+        }))
+    }
+
     render() {
-        let entitiesList = this.props.entities && this.props.entities.map((name, id)=>
+        let entitiesList = this.state.entities && this.state.entities.map((name, id)=>
             <a href="#" 
                 className="list-group-item list-group-item-action bg-light" 
                 key={id}

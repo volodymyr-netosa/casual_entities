@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
-async function parseJsonEntityFile(absolutePath) {
+export async function parseJsonEntityFile(absolutePath:string): Promise<{entity: {}, entityName: string}> {
     return new Promise((resolve, reject) => {
-        fs.readFile(absolutePath, (err, buffer) => {
+        fs.readFile(absolutePath, (err: any, buffer: Buffer) => {
             if (err) return reject(err);
             let entity = JSON.parse(buffer.toString());
             let entityName = removeExtension(getFileNameFromPath(absolutePath));
@@ -15,9 +15,9 @@ async function parseJsonEntityFile(absolutePath) {
     });
 }
 
-async function getJsonFilesInFolder(folderPath) {
+export async function getJsonFilesInFolder(folderPath: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
-        fs.readdir(folderPath, (err, files) => {
+        fs.readdir(folderPath, (err: any, files: string[]) => {
             if (err) return reject(err);
             let jsonFiles = files.filter((value) => value.match(/.json$/));
             resolve(jsonFiles);
@@ -25,9 +25,9 @@ async function getJsonFilesInFolder(folderPath) {
     })
 }
 
-async function getEntitiesFromFolder(folderPath) {
+export async function getEntitiesFromFolder(folderPath: string): Promise<{name:string, props:{}}[]> {
     return getJsonFilesInFolder(folderPath).then((fileNames) => {
-        const entityPromices = []
+        const entityPromices: Promise<{entity: {}, entityName: string}>[] = []
         fileNames.forEach(
             (name) => {
                 entityPromices.push(
@@ -45,14 +45,10 @@ async function getEntitiesFromFolder(folderPath) {
     })
 }
 
-function getFileNameFromPath(path) {
+function getFileNameFromPath(path:string): string {
     return path.replace(/^.*[\\\/]/, '');
 };
 
-function removeExtension(fileName) {
+function removeExtension(fileName:string): string {
     return fileName.split('.').slice(0, -1).join('.');
-}
-
-module.exports = {
-    getEntitiesFromFolder
 }
