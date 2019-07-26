@@ -11,10 +11,9 @@ type Props = {
 export class NewInstanceDialog extends React.Component<Props,any> {
     constructor(props: any) {
         super(props);
-        this.state = {
-
-        }
+        this.state = {}
     }
+
     handleInputChange = (event:any) => {
         const target = event.target;
         let value: any;
@@ -25,13 +24,14 @@ export class NewInstanceDialog extends React.Component<Props,any> {
             case "number":
                 value = parseInt(target.value);
                 break;
-            case "checked":
+            case "checkbox":
+                console.log(target);
                 value = target.checked
         }
         const name = target.name;
 
         this.setState((state: any, props: Props) => {
-            const instance=Object.assign({}, state[props.entityName], {name: value})
+            const instance=Object.assign({}, state[props.entityName], {[name]: value})
             return {[props.entityName]: instance}
         })
     }
@@ -111,9 +111,6 @@ export class NewInstanceDialog extends React.Component<Props,any> {
         this.props.addInstanceHandler(instance);  //it isn't ok to send full this.state
     }
 
-    componentDidUpdate() {
-
-    }
     render() {
         let inputs = this.props.entityTypes && this.generatePropsInputs(this.props.entityTypes);
         return (

@@ -18,7 +18,7 @@ export class ItemsTable extends React.Component<Props,null> {
         return columnNames.map(
             (colName, id) => 
                 <td key={id}>
-                    {instance[colName]}
+                    {instance[colName].toString()}
                 </td>
         )
     }
