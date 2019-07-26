@@ -4,7 +4,12 @@ import { Table } from "react-bootstrap";
 import { NewInstanceDialog } from "./NewInstanceDialog";
 
 
-type Props = { selectedEntityName: string, entityProps:{[key:string] : string}, entityInstances: {}[] }
+type Props = { 
+    selectedEntityName: string, 
+    entityProps:{[key:string] : string}, 
+    entityInstances: {}[],
+    addInstanceHandler: (entity: {}) => any 
+}
 // type State = { entityProps: {[key:string]: string}, entityInstances: {}[]}
 
 export class ItemsTable extends React.Component<Props,null> {
@@ -67,8 +72,10 @@ export class ItemsTable extends React.Component<Props,null> {
                             {this.generateInstanceTable(this.props.entityProps, this.props.entityInstances)}
                         </div>
                         <div className='col-md-5 pr-4'>
-                            <NewInstanceDialog 
+                            <NewInstanceDialog
+                                entityName={this.props.selectedEntityName}
                                 entityTypes={this.props.entityProps}
+                                addInstanceHandler={this.props.addInstanceHandler}
                             />
                         </div>
                     </div>

@@ -26,9 +26,18 @@ export class App extends React.Component<Props,State> {
         this.fetchData(name);
     }
 
+    addInstanceHandler = (instance: {}) => {
+        console.log('asd');
+        this.setState((state) => {
+            const prevInstances = state.entityInstances || [];
+            return { entityInstances: [...prevInstances, instance]}
+        })
+    }
+
     fetchData(entityName: string) {
         axios.get(ENTITY_API_URL, { params: { name: entityName }}).then((response) =>
         {
+            console.log('setting');
             this.setState({
                 entityProps: response.data.entityProps,
                 entityInstances: response.data.entityInstances
@@ -50,6 +59,7 @@ export class App extends React.Component<Props,State> {
                             entityProps={this.state.entityProps}
                             entityInstances={this.state.entityInstances}
                             selectedEntityName={this.state.selectedEntityName}
+                            addInstanceHandler={this.addInstanceHandler}
                         />
                     </div>
                 </div>

@@ -1,12 +1,23 @@
 import * as React from 'react';
 import axios from 'axios';
-const ENTITY_API_URL = '/api';
+const ENTITY_API_URL = '/add';
 
-type Props = { entityTypes: {}}
+type Props = { 
+    entityTypes: {}, 
+    entityName: string,
+    addInstanceHandler: (entity: {}) => any
+}
+
 export class NewInstanceDialog extends React.Component<Props,any> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+
+        }
+    }
     handleInputChange = (event:any) => {
         const target = event.target;
-        let value;
+        let value: any;
         switch (target.type) {
             case "text":
                 value = target.value;
@@ -19,8 +30,9 @@ export class NewInstanceDialog extends React.Component<Props,any> {
         }
         const name = target.name;
 
-        this.setState({
-            [name]:value  
+        this.setState((state: any, props: Props) => {
+            const instance=Object.assign({}, state[props.entityName], {name: value})
+            return {[props.entityName]: instance}
         })
     }
 
@@ -91,7 +103,12 @@ export class NewInstanceDialog extends React.Component<Props,any> {
 
     handleFormSubmit = (event: React.SyntheticEvent) => {
         event.preventDefault();
-        axios.post(ENTITY_API_URL, this.state);  //it isn't ok to send full this.state
+        const instance = this.state[this.props.entityName];
+        axios.post(ENTITY_API_URL, {
+            instance,
+            name: this.props.entityName
+        })
+        this.props.addInstanceHandler(instance);  //it isn't ok to send full this.state
     }
 
     render() {

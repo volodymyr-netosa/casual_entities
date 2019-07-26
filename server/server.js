@@ -3,7 +3,7 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 const { Container, initializeContainer } = require('./utility/container');
-
+const  bodyParser = require('body-parser')
 const DIST_DIR = path.join(__dirname, '../dist');
 const HTML_FILE = path.join(DIST_DIR, 'index.html'); 
 
@@ -12,9 +12,13 @@ const ENTITIES_DIR = path.join(__dirname, 'entities');
 let container = new Container();
 
 app.use(express.static('dist'));
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 app.post('/add', (req, res) => {
-
+  const instance = req.body.instance;
+  const name = req.body.name;
+  container.addEntityInstance(name, instance);
 });
 
 app.get('/names', (req, res) => {
@@ -22,7 +26,7 @@ app.get('/names', (req, res) => {
 });
 
 app.get('/instances', (req,res) => {
-  let entityName = req.query.name;
+  const entityName = req.query.name;
   res.send({
     entityInstances: container.getEntityInstances(entityName),
     entityProps: container.getEntityProps(entityName)
