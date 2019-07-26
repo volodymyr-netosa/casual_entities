@@ -111,6 +111,9 @@ export class NewInstanceDialog extends React.Component<Props,any> {
         this.props.addInstanceHandler(instance);  //it isn't ok to send full this.state
     }
 
+    componentDidUpdate() {
+
+    }
     render() {
         let inputs = this.props.entityTypes && this.generatePropsInputs(this.props.entityTypes);
         return (
