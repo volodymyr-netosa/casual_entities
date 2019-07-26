@@ -18,7 +18,11 @@ app.use(bodyParser.json())
 app.post('/add', (req, res) => {
   const instance = req.body.instance;
   const name = req.body.name;
-  container.addEntityInstance(name, instance);
+  const result = container.addEntityInstance(name, instance);
+  if (result && result.error){
+    return res.status(400).send(result.error)
+  }
+  return res.status(200).send('Ok');
 });
 
 app.get('/names', (req, res) => {

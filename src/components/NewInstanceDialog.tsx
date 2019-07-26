@@ -107,8 +107,7 @@ export class NewInstanceDialog extends React.Component<Props,any> {
         axios.post(ENTITY_API_URL, {
             instance,
             name: this.props.entityName
-        })
-        this.props.addInstanceHandler(instance);  //it isn't ok to send full this.state
+        }).then(()=>this.props.addInstanceHandler(instance));  //it isn't ok to send full this.state
     }
 
     render() {

@@ -16,10 +16,16 @@ class Container {
     
     addEntity(name, properties) {
         if (this.entities.has(name) || !this.verifyEntityProperties(properties)) {
-            console.log(`Adding ${name} entity failed. Not allowed data type or entity with that name already exists.`)   //TODO: add normal logger?
-            return false;
+            const error = `Adding ${name} entity failed. Not allowed data type or entity with that name already exists.`;
+            console.log(error)   //TODO: add normal logger?
+            return {
+                error
+            };
         }
         this.entities.set(name, properties);
+        return {
+            error: false
+        };
     }
 
     getEntityInstances(name) {
@@ -32,13 +38,17 @@ class Container {
 
     addEntityInstance(entityName, instance) {
         if (!this.verityEntityInstance(entityName, instance)) {
-            console.log(`Cant add ${entityName} instance ${JSON.stringify(instance)}, props type mismatching`); //TODO: logger ?Xd
-            return false;
+            const error = `Cant add ${entityName} instance ${JSON.stringify(instance)}, props type mismatching`;
+            console.log(error); //TODO: logger ?Xd
+            return { error };
         }
         if (this.entitiesInstances.has(entityName)) {
             this.entitiesInstances.get(entityName).push(instance);
         }
         else this.entitiesInstances.set(entityName,[instance]);
+        return {
+            error: false
+        }
     }
 
     getEntitiesNames(){
