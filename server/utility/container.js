@@ -1,10 +1,13 @@
 
+const { getEntitiesFromFolder } = require('./utility');
 class Container {
-    constructor(entities) {
+    constructor() {
         this.entities = new Map();
         this.entitiesInstances = new Map();
         this.allowedDataTypes = ['string', 'number', 'boolean']
+    }
 
+    init(entities){
         entities.forEach((value) => {
             const { name, props } = value;
             this.addEntity(name, props);
@@ -65,9 +68,18 @@ class Container {
         return this.entities.delete(name);
     }
 }
-
-module.exports = async function initializeContainer(entitiesPath) { 
+async function initializeContainer(container, entitiesPath) { 
     return getEntitiesFromFolder(entitiesPath).then(
-      (entities) => new Container(entities) 
+        (entities) => {
+            container.init(entities);
+        },
+        (err) => {
+            console.log("Error intializing container", err);
+        }
     )
+}
+
+module.exports = {
+    initializeContainer,
+    Container
 }
