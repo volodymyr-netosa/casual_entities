@@ -18,8 +18,12 @@ export class Container {
         this.entities.set(name, properties);
     }
 
-    getEntityInstances(name: string) {
+    getEntityInstances(name: string): {}[] {
         return this.entitiesInstances.get(name);
+    }
+
+    getEntityProps(name: string): {}{
+        return this.entities.get(name);
     }
 
     addEntityInstance(entityName: string, instance: {}) {

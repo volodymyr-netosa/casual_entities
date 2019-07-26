@@ -1,4 +1,4 @@
 {
-    "name": "string",
-    "age": "number"
+    "firmware": "string",
+    "cpu core": "number"
 }

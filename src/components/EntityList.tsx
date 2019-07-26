@@ -18,8 +18,8 @@ export class EntityList extends React.Component<Props,null> {
             </a>
         );
         return (
-            <div className="bg-light border-right" id="sidebar-wrapper">
-                <div className="sidebar-heading">Entities list</div>
+            <div className="bg-light border-right fill" id="sidebar-wrapper">
+                <div className="sidebar-heading p-md-3 text-center">Entities list</div>
                 <div className="list-group list-group-flush">
                     {entitiesList}
                 </div>
